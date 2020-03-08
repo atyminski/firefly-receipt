@@ -1,0 +1,21 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Gevlee.FireflyReceipt.Application.ViewModels;assembly=Gevlee.FireflyReceipt.Application"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Gevlee.FireflyReceipt.Application.Views.ReceiptsSearchSettingsView">
+  <Design.DataContext>
+    <vm:ReceiptsSearchSettingsViewModel/>
+  </Design.DataContext>
+  <StackPanel Orientation="Vertical" Spacing="5">
+    <Grid ColumnDefinitions="100,*" >
+      <TextBlock Text="Receipts dir: " Grid.Column="0" VerticalAlignment="Center"/>
+      <TextBox Grid.Column="1" IsEnabled="False" Text="{Binding ReceiptsDir}"/>
+    </Grid>
+    <Grid ColumnDefinitions="100,*" >
+      <TextBlock Text="Filter regexp: " Grid.Column="0" VerticalAlignment="Center"/>
+      <TextBox Grid.Column="1" IsEnabled="False" Text="{Binding FilterRegex}"></TextBox>
+    </Grid>
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,25 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:Gevlee.FireflyReceipt.Application.ViewModels;assembly=Gevlee.FireflyReceipt.Application"
+        xmlns:views="clr-namespace:Gevlee.FireflyReceipt.Application.Views;assembly=Gevlee.FireflyReceipt.Application"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Gevlee.FireflyReceipt.Application.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Firefly III Receipt">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+  <Window.Styles>
+    <Style Selector="Grid.main">
+      <Setter Property="Margin" Value="10,5" />
+    </Style>
+  </Window.Styles>
+  <Grid ColumnDefinitions="1*,1*" RowDefinitions="Auto,1*" Classes="main">
+    <views:ReceiptsSearchSettingsView DataContext="{Binding ReceiptsSearchSettingsModel}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" />
+    <views:ReceiptsBrowserView DataContext="{Binding ReceiptsBrowserModel}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="1" />
+    <views:TransactionsListView DataContext="{Binding TransactionsListModel}" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"/>
+  </Grid>
+</Window>

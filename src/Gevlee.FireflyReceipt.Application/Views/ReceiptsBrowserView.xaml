@@ -1,0 +1,25 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:Gevlee.FireflyReceipt.Application.Converters;assembly=Gevlee.FireflyReceipt.Application"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Gevlee.FireflyReceipt.Application.Views.ReceiptsBrowserView">
+  <UserControl.Resources>
+    <converters:FileNameConverter x:Key="fileNameConverter" />
+  </UserControl.Resources>
+  <Grid ColumnDefinitions="1*" RowDefinitions="30,1*, 30">
+    <ComboBox Items="{Binding ReceiptsPaths}" SelectedItem="{Binding SelectedReciptPath, Mode=TwoWay}" SelectedIndex="{Binding SelectedReciptPathIndex, Mode=TwoWay}">
+      <ComboBox.ItemTemplate>
+        <DataTemplate>
+          <ComboBoxItem Content="{Binding, Converter={StaticResource fileNameConverter}}}" />
+        </DataTemplate>
+      </ComboBox.ItemTemplate>
+    </ComboBox>
+    <Image Grid.Column="0" Grid.Row="1" Source="{Binding ReceiptImg}"/>
+    <Grid Grid.Row="2" ColumnDefinitions="1*,1*" HorizontalAlignment="Stretch">
+      <Button HorizontalAlignment="Stretch" Grid.Column="0" HotKey="Left" Command="{Binding OnPrevious}">Previous</Button>
+      <Button HorizontalAlignment="Stretch" Grid.Column="1" HotKey="Right" Command="{Binding OnNext}">Next</Button>
+    </Grid>
+  </Grid>
+</UserControl>
