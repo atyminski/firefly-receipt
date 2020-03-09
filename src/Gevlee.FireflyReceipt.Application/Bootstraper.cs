@@ -1,4 +1,5 @@
-﻿using Gevlee.FireflyReceipt.Application.Settings;
+﻿using Gevlee.FireflyReceipt.Application.Services;
+using Gevlee.FireflyReceipt.Application.Settings;
 using Gevlee.FireflyReceipt.Application.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,6 +52,8 @@ namespace Gevlee.FireflyReceipt.Application
             services.AddSingleton<MainWindowViewModel>();
             services.AddTransient<ReceiptsBrowserViewModel>();
             services.AddTransient<ReceiptsSearchSettingsViewModel>();
+            services.AddTransient<IAttachmentService, AttachmentService>();
+            services.AddTransient<IFireflyClient, FireflyClient>();
         }
     }
 }

@@ -2,6 +2,7 @@
 using Avalonia.Logging.Serilog;
 using Avalonia.ReactiveUI;
 
+[assembly: PropertyChanged.FilterType("Gevlee.FireflyReceipt.Application.Models")]
 namespace Gevlee.FireflyReceipt.Application
 {
     public class Program

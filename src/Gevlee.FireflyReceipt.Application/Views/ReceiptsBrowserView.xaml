@@ -9,10 +9,13 @@
     <converters:FileNameConverter x:Key="fileNameConverter" />
   </UserControl.Resources>
   <Grid ColumnDefinitions="1*" RowDefinitions="30,1*, 30">
-    <ComboBox Items="{Binding ReceiptsPaths}" SelectedItem="{Binding SelectedReciptPath, Mode=TwoWay}" SelectedIndex="{Binding SelectedReciptPathIndex, Mode=TwoWay}">
+    <ComboBox Items="{Binding Receipts}" SelectedItem="{Binding SelectedRecipt, Mode=TwoWay}" SelectedIndex="{Binding SelectedReciptIndex, Mode=TwoWay}">
       <ComboBox.ItemTemplate>
         <DataTemplate>
-          <ComboBoxItem Content="{Binding, Converter={StaticResource fileNameConverter}}}" />
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{Binding Path, Converter={StaticResource fileNameConverter}}}" />
+            <TextBlock Text="(assigned)" IsVisible="{Binding IsAlreadyAssigned}" />
+          </StackPanel>
         </DataTemplate>
       </ComboBox.ItemTemplate>
     </ComboBox>
