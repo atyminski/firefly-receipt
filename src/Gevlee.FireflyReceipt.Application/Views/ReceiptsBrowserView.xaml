@@ -12,9 +12,9 @@
     <ComboBox Items="{Binding Receipts}" SelectedItem="{Binding SelectedRecipt, Mode=TwoWay}" SelectedIndex="{Binding SelectedReciptIndex, Mode=TwoWay}">
       <ComboBox.ItemTemplate>
         <DataTemplate>
-          <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{Binding Path, Converter={StaticResource fileNameConverter}}}" />
-            <TextBlock Text="(assigned)" IsVisible="{Binding IsAlreadyAssigned}" />
+          <StackPanel Orientation="Horizontal" MinWidth="30">
+            <TextBlock VerticalAlignment="Center" Text="{Binding Path, Converter={StaticResource fileNameConverter}}}"/>
+            <Image Source="resm:Gevlee.FireflyReceipt.Application.Assets.tick.png?assembly=Gevlee.FireflyReceipt.Application" IsVisible="{Binding IsAlreadyAssigned}"/>
           </StackPanel>
         </DataTemplate>
       </ComboBox.ItemTemplate>

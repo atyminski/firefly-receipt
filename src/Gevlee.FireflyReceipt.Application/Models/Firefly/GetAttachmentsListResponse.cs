@@ -1,40 +1,14 @@
-﻿namespace Gevlee.FireflyReceipt.Models.Firefly
+﻿using System;
+using Gevlee.FireflyReceipt.Application.Models.Firefly;
+using Newtonsoft.Json;
+
+namespace Gevlee.FireflyReceipt.Application.Models.Firefly
 {
-    using System;
-
-    using System.Globalization;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-
-    public class GetAttatchmentsResponse
+    public class GetAttatchmentsResponse : BaseResponse<AttatchmentsAttributes>
     {
-        [JsonProperty("data")]
-        public Datum[] Data { get; set; }
-
-        [JsonProperty("meta")]
-        public Meta Meta { get; set; }
-
-        [JsonProperty("links")]
-        public GetAttatchmentsResponseLinks Links { get; set; }
     }
 
-    public class Datum
-    {
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("id")]
-        [JsonConverter(typeof(ParseStringConverter))]
-        public long Id { get; set; }
-
-        [JsonProperty("attributes")]
-        public Attributes Attributes { get; set; }
-
-        [JsonProperty("links")]
-        public DatumLinks Links { get; set; }
-    }
-
-    public class Attributes
+    public class AttatchmentsAttributes
     {
         [JsonProperty("created_at")]
         public DateTimeOffset CreatedAt { get; set; }
@@ -71,63 +45,6 @@
 
         [JsonProperty("size")]
         public long Size { get; set; }
-    }
-
-    public class DatumLinks
-    {
-        [JsonProperty("0")]
-        public The0 The0 { get; set; }
-
-        [JsonProperty("self")]
-        public string Self { get; set; }
-    }
-
-    public class The0
-    {
-        [JsonProperty("rel")]
-        public string Rel { get; set; }
-
-        [JsonProperty("uri")]
-        public string Uri { get; set; }
-    }
-
-    public class GetAttatchmentsResponseLinks
-    {
-        [JsonProperty("self")]
-        public string Self { get; set; }
-
-        [JsonProperty("first")]
-        public string First { get; set; }
-
-        [JsonProperty("prev")]
-        public string Prev { get; set; }
-
-        [JsonProperty("last")]
-        public string Last { get; set; }
-    }
-
-    public class Meta
-    {
-        [JsonProperty("pagination")]
-        public Pagination Pagination { get; set; }
-    }
-
-    public class Pagination
-    {
-        [JsonProperty("total")]
-        public long Total { get; set; }
-
-        [JsonProperty("count")]
-        public long Count { get; set; }
-
-        [JsonProperty("per_page")]
-        public long PerPage { get; set; }
-
-        [JsonProperty("current_page")]
-        public long CurrentPage { get; set; }
-
-        [JsonProperty("total_pages")]
-        public long TotalPages { get; set; }
     }
 
     //public partial class GetAttatchmentsResponse

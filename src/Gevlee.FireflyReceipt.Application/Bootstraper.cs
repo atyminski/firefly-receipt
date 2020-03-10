@@ -1,7 +1,6 @@
 ﻿using Gevlee.FireflyReceipt.Application.Services;
 using Gevlee.FireflyReceipt.Application.Settings;
 using Gevlee.FireflyReceipt.Application.ViewModels;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ReactiveUI;
@@ -9,7 +8,6 @@ using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
 using Splat.Microsoft.Extensions.Logging;
 using System;
-using System.IO;
 
 namespace Gevlee.FireflyReceipt.Application
 {
@@ -53,6 +51,7 @@ namespace Gevlee.FireflyReceipt.Application
             services.AddTransient<ReceiptsBrowserViewModel>();
             services.AddTransient<ReceiptsSearchSettingsViewModel>();
             services.AddTransient<IAttachmentService, AttachmentService>();
+            services.AddTransient<ITransactionService, TransactionService>();
             services.AddTransient<IFireflyClient, FireflyClient>();
         }
     }

@@ -20,13 +20,14 @@ namespace Gevlee.FireflyReceipt.Application.ViewModels
     {
         private IEnumerable<ReceiptsListItem> receiptsPaths;
         private ReceiptsListItem selectedReciptPath;
-        private int selectedReciptPathIndex;
+        private int selectedReciptIndex;
         private IBitmap recepitImg;
         private IAttachmentService attachmentService;
 
         public ReceiptsBrowserViewModel()
         {
             attachmentService = Locator.Current.GetService<IAttachmentService>();
+
             this.WhenAnyValue(x => x.SelectedRecipt)
                 .Where(x => x != null && !string.IsNullOrWhiteSpace(x.Path) && File.Exists(x.Path))
                 .Select(x => x.Path)
@@ -34,14 +35,15 @@ namespace Gevlee.FireflyReceipt.Application.ViewModels
 
             Receipts = new List<ReceiptsListItem>();
 
-            _ = LoadImagesAsync();
+            Observable.FromAsync(LoadImagesAsync)
+                .Subscribe();
         }
 
         public IEnumerable<ReceiptsListItem> Receipts { get => receiptsPaths; set => this.RaiseAndSetIfChanged(ref receiptsPaths, value); }
 
         public ReceiptsListItem SelectedRecipt { get => selectedReciptPath; set => this.RaiseAndSetIfChanged(ref selectedReciptPath, value); }
 
-        public int SelectedReciptIndex { get => selectedReciptPathIndex; set => this.RaiseAndSetIfChanged(ref selectedReciptPathIndex, value); }
+        public int SelectedReciptIndex { get => selectedReciptIndex; set => this.RaiseAndSetIfChanged(ref selectedReciptIndex, value); }
 
         public IBitmap ReceiptImg { get => recepitImg; set => this.RaiseAndSetIfChanged(ref recepitImg, value); }
 
@@ -78,9 +80,11 @@ namespace Gevlee.FireflyReceipt.Application.ViewModels
                 .Select(x => new ReceiptsListItem
                 {
                     Path = x,
-                    IsAlreadyAssigned = alreadyAssigned
-                        .Any(y => y.Filename.Equals(Path.GetFileName(x), StringComparison.OrdinalIgnoreCase))
+                    TransactionId = alreadyAssigned
+                        .FirstOrDefault(y => y.Filename.Equals(Path.GetFileName(x), StringComparison.OrdinalIgnoreCase))?.TransactionId
                 });
+
+            SelectedRecipt = Receipts.FirstOrDefault();
         }
     }
 }

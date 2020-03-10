@@ -1,11 +1,10 @@
-﻿using Gevlee.FireflyReceipt.Application.Settings;
-using Gevlee.FireflyReceipt.Models.Firefly;
+﻿using Gevlee.FireflyReceipt.Application.Models.Firefly;
+using Gevlee.FireflyReceipt.Application.Settings;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Authenticators;
 using RestSharp.Serialization;
-using RestSharp.Serialization.Json;
 using System.Threading.Tasks;
 
 namespace Gevlee.FireflyReceipt.Application.Services
@@ -36,7 +35,22 @@ namespace Gevlee.FireflyReceipt.Application.Services
             }
         }
 
-        public class JsonNetSerializer : IRestSerializer
+        public async Task<GetTransactionsResponse> GetTransactionsAsync(int? page)
+        {
+            var request = new RestRequest("api/v1/transactions", Method.GET, DataFormat.Json);
+            request.AddParameter("page", page);
+
+            try
+            {
+                return await _restClient.GetAsync<GetTransactionsResponse>(request);
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
+        private class JsonNetSerializer : IRestSerializer
         {
             public string Serialize(object obj) =>
                 JsonConvert.SerializeObject(obj);

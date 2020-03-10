@@ -1,27 +1,48 @@
 ﻿using Gevlee.FireflyReceipt.Application.Models;
+using Gevlee.FireflyReceipt.Application.Services;
 using ReactiveUI;
-using System.Collections.Generic;
+using Splat;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reactive.Linq;
+using static Gevlee.FireflyReceipt.Application.Models.TransactionsListViewModel;
 
 namespace Gevlee.FireflyReceipt.Application.ViewModels
 {
-    public class TransactionsListViewModel : ReactiveObject
+    public partial class TransactionsListViewModel : ReactiveObject
     {
-        private IEnumerable<Transaction> transactions;
+        private ObservableCollection<ReceiptTransaction> transactions;
+        private ReceiptsListItem currentReceipt;
 
         public TransactionsListViewModel()
         {
             LoadTransactions();
+            this.WhenAnyValue(x => x.CurrentReceipt)
+                .Subscribe(_ => OnCurrentReceiptChanged());
         }
 
-        public IEnumerable<Transaction> Transactions { get => transactions; set => this.RaiseAndSetIfChanged(ref transactions, value); }
+        public ObservableCollection<ReceiptTransaction> Transactions { get => transactions; set => this.RaiseAndSetIfChanged(ref transactions, value); }
+
+        public ReceiptsListItem CurrentReceipt { get => currentReceipt; set => this.RaiseAndSetIfChanged(ref currentReceipt, value); }
 
         private void LoadTransactions()
         {
-            Transactions = new Transaction[] 
-            { 
-                new Transaction { Amount = (decimal)2.23, Name = "TEST Transaction 1", Currency = "PLN" },
-                new Transaction { Amount = (decimal)5.99, Name = "TEST Transaction 2", Currency = "PLN" },
-            };
+            var service = Locator.Current.GetService<ITransactionService>();
+            Observable.FromAsync(service.GetFlatTransactions)
+                .Subscribe(result =>
+                    {
+                        Transactions = new ObservableCollection<ReceiptTransaction>(result.Select(ReceiptTransaction.FromFlatTransaction).ToList());
+                        OnCurrentReceiptChanged();
+                    });
+        }
+
+        private void OnCurrentReceiptChanged()
+        {
+            foreach(var transaction in Transactions ?? new ObservableCollection<ReceiptTransaction>())
+            {
+                transaction.HasAssignedReceipt = CurrentReceipt != null && CurrentReceipt.TransactionId.HasValue && CurrentReceipt.TransactionId == transaction.Id;
+            }
         }
     }
 }
