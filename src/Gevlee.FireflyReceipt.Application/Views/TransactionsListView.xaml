@@ -5,7 +5,9 @@
              xmlns:converters="clr-namespace:Gevlee.FireflyReceipt.Application.Converters;assembly=Gevlee.FireflyReceipt.Application"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="clr-namespace:Gevlee.FireflyReceipt.Application.ViewModels;assembly=Gevlee.FireflyReceipt.Application"
-             x:Class="Gevlee.FireflyReceipt.Application.Views.TransactionsListView">
+             xmlns:views="clr-namespace:Gevlee.FireflyReceipt.Application.Views;assembly=Gevlee.FireflyReceipt.Application"
+             x:Class="Gevlee.FireflyReceipt.Application.Views.TransactionsListView"
+              Name="parentTransactionList">
   <Design.DataContext>
     <vm:TransactionsListViewModel/>
   </Design.DataContext>
@@ -13,11 +15,6 @@
     <converters:AmountConverter x:Key="amountConverter" />
     <converters:BoolToBrushConverter x:Key="boolToGreenColorConverter" Brush="#bfffd0" />
   </UserControl.Resources>
-  <UserControl.Styles>
-    <Style Selector="Grid.assigned">
-      <Setter Property="Background" Value="Green" />
-    </Style>
-  </UserControl.Styles>
   <ScrollViewer>
     <ItemsControl Items="{Binding Transactions}">
       <ItemsControl.ItemTemplate>
@@ -31,9 +28,9 @@
             <TextBlock Grid.Column="0" Text="{Binding Description}" />
             <TextBlock Grid.Column="1" Text="{Binding Amount, Converter={StaticResource amountConverter}}" />
             <TextBlock Grid.Column="2" Text="{Binding Currency}" />
-            <StackPanel Orientation="Horizontal" Grid.Column="3">
-              <Button Content="Assign" IsEnabled="{Binding !HasAssignedReceipt}" />
-            </StackPanel>
+            <Button Grid.Column="3" Command="{Binding $parent[UserControl].DataContext.OnAssign}" CommandParameter="{Binding Id}">
+              Assign
+            </Button>
           </Grid>
         </DataTemplate>
       </ItemsControl.ItemTemplate>

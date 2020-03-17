@@ -5,12 +5,14 @@ using Splat;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using static Gevlee.FireflyReceipt.Application.Models.TransactionsListViewModel;
 
 namespace Gevlee.FireflyReceipt.Application.ViewModels
 {
-    public partial class TransactionsListViewModel : ReactiveObject
+    public class TransactionsListViewModel : ReactiveObject
     {
         private ObservableCollection<ReceiptTransaction> transactions;
         private ReceiptsListItem currentReceipt;
@@ -19,12 +21,27 @@ namespace Gevlee.FireflyReceipt.Application.ViewModels
         {
             LoadTransactions();
             this.WhenAnyValue(x => x.CurrentReceipt)
-                .Subscribe(_ => OnCurrentReceiptChanged());
+                .Subscribe(_ => RefreshAssignment());
         }
 
         public ObservableCollection<ReceiptTransaction> Transactions { get => transactions; set => this.RaiseAndSetIfChanged(ref transactions, value); }
 
         public ReceiptsListItem CurrentReceipt { get => currentReceipt; set => this.RaiseAndSetIfChanged(ref currentReceipt, value); }
+
+        public ReactiveCommand<long, Unit> OnAssign => ReactiveCommand.CreateFromTask<long>(
+            AssignReceipt,
+            this.WhenAnyValue(
+                x => x.CurrentReceipt,
+                x => x.CurrentReceipt.IsAlreadyAssigned)
+                .Select(r => !r.Item1.TransactionId.HasValue));
+
+        private async Task AssignReceipt(long arg)
+        {
+            var service = Locator.Current.GetService<IAttachmentService>();
+            await service.AssignReceipt(CurrentReceipt.Path, arg);
+            CurrentReceipt.TransactionId = arg; //not modifies collection item but immutable copy - to fix
+            RefreshAssignment();
+        }
 
         private void LoadTransactions()
         {
@@ -33,11 +50,11 @@ namespace Gevlee.FireflyReceipt.Application.ViewModels
                 .Subscribe(result =>
                     {
                         Transactions = new ObservableCollection<ReceiptTransaction>(result.Select(ReceiptTransaction.FromFlatTransaction).ToList());
-                        OnCurrentReceiptChanged();
+                        RefreshAssignment();
                     });
         }
 
-        private void OnCurrentReceiptChanged()
+        private void RefreshAssignment()
         {
             foreach(var transaction in Transactions ?? new ObservableCollection<ReceiptTransaction>())
             {

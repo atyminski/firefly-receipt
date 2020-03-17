@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Authenticators;
 using RestSharp.Serialization;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Gevlee.FireflyReceipt.Application.Services
@@ -43,6 +44,41 @@ namespace Gevlee.FireflyReceipt.Application.Services
             try
             {
                 return await _restClient.GetAsync<GetTransactionsResponse>(request);
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<CreateAttachmentResponse> CreateAttachmentAsync(CreateAttachmentRequest requestModel)
+        {
+            var request = new RestRequest("api/v1/attachments", Method.POST, DataFormat.Json);
+            request.AddJsonBody(requestModel);
+
+            try
+            {
+                return await _restClient.PostAsync<CreateAttachmentResponse>(request);
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task UploadAttachment(long attachmentId, byte[] fileBytes, string fileName)
+        {
+            var request = new RestRequest("api/v1/attachments/{id}/upload", Method.POST);
+            request.AddParameter("id", attachmentId, ParameterType.UrlSegment);
+            request.AddParameter("application/octet-stream", fileBytes, ParameterType.RequestBody);
+
+            try
+            {
+                var result = await _restClient.ExecuteAsync(request);
+                if (result.StatusCode != HttpStatusCode.NoContent)
+                {
+                    throw new System.Exception("Invalid response code != 204");
+                }
             }
             catch (System.Exception)
             {

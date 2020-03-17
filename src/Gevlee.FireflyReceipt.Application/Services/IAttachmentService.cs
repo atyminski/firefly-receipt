@@ -7,5 +7,6 @@ namespace Gevlee.FireflyReceipt.Application.Services
     public interface IAttachmentService
     {
         Task<IEnumerable<AlreadyAssignedReceipt>> GetAlreadyAssignedReceipts();
+        Task AssignReceipt(string imgPath, long transactionId);
     }
 }

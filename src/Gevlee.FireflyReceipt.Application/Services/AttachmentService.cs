@@ -1,5 +1,7 @@
 ﻿using Gevlee.FireflyReceipt.Application.Models;
+using Gevlee.FireflyReceipt.Application.Models.Firefly;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -36,6 +38,19 @@ namespace Gevlee.FireflyReceipt.Application.Services
             }
 
             return result;
+        }
+
+        public async Task AssignReceipt(string imgPath, long transactionId)
+        {
+            var fileName = System.IO.Path.GetFileName(imgPath);
+            var createAttachmentResponse = await Client.CreateAttachmentAsync(new CreateAttachmentRequest
+            {
+                AttachableType = "TransactionJournal",
+                AttachableId = transactionId,
+                Filename = fileName
+            });
+
+            await Client.UploadAttachment(createAttachmentResponse.Data.Id, File.ReadAllBytes(imgPath), fileName);
         }
     }
 }

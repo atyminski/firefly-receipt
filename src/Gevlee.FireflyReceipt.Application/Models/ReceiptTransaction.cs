@@ -1,5 +1,4 @@
-﻿using Gevlee.FireflyReceipt.Application.Models;
-using PropertyChanged;
+﻿using PropertyChanged;
 
 namespace Gevlee.FireflyReceipt.Application.Models
 {

@@ -4,6 +4,7 @@ using Gevlee.FireflyReceipt.Application.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ReactiveUI;
+using Serilog;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
 using Splat.Microsoft.Extensions.Logging;
@@ -17,6 +18,7 @@ namespace Gevlee.FireflyReceipt.Application
         {
             var host = Host
               .CreateDefaultBuilder()
+              .UseSerilog()
               .ConfigureServices((context, services) =>
               {
                   services.UseMicrosoftDependencyResolver();

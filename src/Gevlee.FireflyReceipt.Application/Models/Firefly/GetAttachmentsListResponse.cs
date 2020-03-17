@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Gevlee.FireflyReceipt.Application.Models.Firefly
 {
-    public class GetAttatchmentsResponse : BaseResponse<AttatchmentsAttributes>
+    public class GetAttatchmentsResponse : BaseListResponse<AttatchmentsAttributes>
     {
     }
 

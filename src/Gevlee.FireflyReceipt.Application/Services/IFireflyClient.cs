@@ -7,5 +7,7 @@ namespace Gevlee.FireflyReceipt.Application.Services
     {
         Task<GetAttatchmentsResponse> GetAttatchementsAsync(int? page = null);
         Task<GetTransactionsResponse> GetTransactionsAsync(int? page);
+        Task<CreateAttachmentResponse> CreateAttachmentAsync(CreateAttachmentRequest requestModel);
+        Task UploadAttachment(long attachmentId, byte[] fileBytes, string fileName);
     }
 }

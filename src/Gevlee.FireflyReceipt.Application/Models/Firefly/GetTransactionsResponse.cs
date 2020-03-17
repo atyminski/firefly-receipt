@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Gevlee.FireflyReceipt.Application.Models.Firefly
 {
-    public class GetTransactionsResponse : BaseResponse<TransactionsAttributes>
+    public class GetTransactionsResponse : BaseListResponse<TransactionsAttributes>
     {
     }
 
