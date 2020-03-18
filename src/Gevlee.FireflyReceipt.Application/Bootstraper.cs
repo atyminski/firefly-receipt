@@ -18,7 +18,7 @@ namespace Gevlee.FireflyReceipt.Application
         {
             var host = Host
               .CreateDefaultBuilder()
-              .UseSerilog()
+              //.UseSerilog()
               .ConfigureServices((context, services) =>
               {
                   services.UseMicrosoftDependencyResolver();
